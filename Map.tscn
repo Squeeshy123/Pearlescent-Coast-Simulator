@@ -1,0 +1,14 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://Camera.tscn" type="PackedScene" id=1]
+[ext_resource path="res://map3.png" type="Texture" id=2]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="map_placeholder" type="Sprite" parent="." groups=[
+"map",
+]]
+texture = ExtResource( 2 )
+region_rect = Rect2( 2.502, 3.405, 3.467, 3.063 )
+
+[node name="Camera2D" parent="." instance=ExtResource( 1 )]

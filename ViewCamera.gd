@@ -14,9 +14,11 @@ func _input(event):
 		Zoom_amount += 0.0125
 	if Input.is_action_pressed("Zoom_out"):
 		Zoom_amount -= 0.0125
+	
 	if Input.is_action_just_pressed("Change_turn"):
 		for i in get_tree().get_nodes_in_group("turn"):
 			i.change_turn()
+		
 	
 
 
@@ -24,7 +26,6 @@ func get_input():
 	velocity = Vector2.ZERO
 	Zoom_amount = clamp(Zoom_amount, 0, 1)
 	
-	print(Zoom_amount)
 	
 	if Input.is_action_pressed("Down"):
 		velocity.y += 1

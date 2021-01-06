@@ -2,20 +2,20 @@
 
 [ext_resource path="res://ViewCamera.gd" type="Script" id=1]
 
-[sub_resource type="Curve" id=2]
+[sub_resource type="Curve" id=1]
 min_value = 0.05
 max_value = 3.0
-_data = [ Vector2( 0, 3 ), 0.0, -0.960555, 0, 0, Vector2( 1, 0.05 ), -0.0327465, 0.0, 0, 0 ]
+_data = [ Vector2( 0, 3 ), 0.0, 7.61266e-07, 0, 0, Vector2( 0.994506, 0.0768182 ), -4.41606, 0.0, 0, 0 ]
 
-[sub_resource type="CircleShape2D" id=1]
+[sub_resource type="CircleShape2D" id=2]
 
 [node name="Camera2D" type="Camera2D"]
 current = true
 script = ExtResource( 1 )
-Zoom_curve = SubResource( 2 )
+Zoom_curve = SubResource( 1 )
 
 [node name="KinematicBody2D" type="KinematicBody2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KinematicBody2D"]
-shape = SubResource( 1 )
+shape = SubResource( 2 )
 disabled = true

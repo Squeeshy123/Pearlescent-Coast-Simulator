@@ -5,8 +5,11 @@ onready var camera = get_tree().get_nodes_in_group("Camera")[0]
 onready var other_towns = get_tree().get_nodes_in_group("gland_t")
 
 var mouse_in : bool = false
+const convo = preload("res://AI/Convoy.tscn")
 
-var data = {
+var spawned_convoy = false
+
+export var data = {
 	"name" : "hello",
 	"food" : 100,
 	"wood" : 100,
@@ -17,6 +20,8 @@ var data = {
 	"people":400,
 	"efficiency":10
 	}
+
+var resource_diff = 15
 
 var stats = [data.food, data.wood, data.stone, data.steel, data.fuel, data.people, data.efficiency]
 
@@ -35,7 +40,22 @@ func _process(delta):
 func change_turn():
 	for i in range(0, stats.size()-1):
 		stats[i] -= data.usage
+	for i in other_towns:
+		if i.data.steel > data.steel - resource_diff and !spawned_convoy:
+			send_convoy(i, ["steel"], resource_diff)
+			spawned_convoy = true
 	update_info()
+
+
+func send_convoy(target_town : Node2D, resource : PoolStringArray, amount : int):
+	var convoi = convo.instance()
+	get_parent().add_child(convoi)
+	convoi.position = position
+	convoi.target = target_town
+
+func give_resources(res : PoolStringArray, res_amount : float):
+	for i in res:
+		data[i] += res_amount
 
 func update_info():
 	$Info.update_data(stats)

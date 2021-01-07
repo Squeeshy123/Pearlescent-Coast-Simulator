@@ -24,8 +24,6 @@ var stats = [data.food, data.wood, data.stone, data.steel, data.fuel, data.peopl
 func _ready():
 	data.efficiency = data.people * 0.01
 	data.usage = data.people * data.efficiency / 1000
-	
-	print(data.usage)
 
 func _process(delta):
 	$Sprite.scale = Vector2(1.1 - camera.Zoom_amount, 1.1 - camera.Zoom_amount) * 5

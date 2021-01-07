@@ -9,6 +9,7 @@ var resource_amount : float = 10
 
 func change_turn():
 	position += position.direction_to(target.position) * speed
-	if position.distance_to(target.position) < 20:
+	print(position.distance_to(target.position))
+	if position.distance_to(target.position) < 30:
 		target.give_resources(resources, resource_amount)
 		queue_free()

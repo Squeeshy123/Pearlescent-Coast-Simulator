@@ -16,12 +16,12 @@ _global_script_class_icons={
 [application]
 
 config/name="PearlescentCoast Simulator"
-run/main_scene="res://Map.tscn"
+run/main_scene="res://MapSimulator/Map.tscn"
 config/icon="res://icon.png"
 
 [autoload]
 
-Global="*res://Map.gd"
+Global="*res://MapSimulator/Map.gd"
 
 [display]
 

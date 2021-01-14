@@ -80,4 +80,5 @@ add_point={
 
 [rendering]
 
+environment/default_clear_color=Color( 0.269531, 0.14003, 0.204781, 1 )
 environment/default_environment="res://default_env.tres"

@@ -1,9 +1,9 @@
 extends Node2D
 
-const up_rules = [[10, 4], [-1,4],[0,0]]
-const down_rules = [[7, 8], [-1,8], [0,0]]
-const left_rules = [[10, 10], [-1,10], [0,0]]
-const right_rules = [[7, 13], [-1,13], [0,0]]
+const up_rules = [[0,0], [-1, 4], [7, 5], [13, 2], [12, 27], [10, 3], [7, 5], [6, 30], [8, 28], [9,29]]
+const down_rules = [[0,0], [-1, 8], [10,9], [7,6], [4, 28], [5, 30], [3, 29], [2, 27], [13, 12]]
+const left_rules = [[0,0], [-1, 10], [4, 3], [7, 13], [5, 2], [8, 9], [6, 12], [28, 29]]
+const right_rules = [[0,0], [-1, 7], [4, 5], [10, 13], [9, 12], [8, 6], [29, 27], [3, 2], [28, 30]]
 
 var grid_size = Vector2(1000,1000)
 var grid_scale = 64
@@ -11,12 +11,23 @@ var grid_color = Color(1,1,1,0.1)
 
 enum direction {UP, DOWN, LEFT, RIGHT}
 
+var cells : PoolVector2Array = []
 
+var data = {
+'dat': cells
+}
 
+func save():
+	# open file
+	var file = File.new()
+	file.open("user://dungeon01.json", File.WRITE)
+	file.store_line(JSON.print(data))
 
-# Called when the node enters the scene tree for the first time.
-func _ready():
-	pass # Replace with function body.
+func load_file():
+	var file = File.new()
+	file.open("user://dungeon01.json", File.READ)
+	data = JSON.parse(file.get_line())
+
 
 func get_tile_in_dir(loc,dir):
 	match dir:
@@ -30,58 +41,6 @@ func get_tile_in_dir(loc,dir):
 			return $TileMap.get_cell(loc.x + 1, loc.y)
 
 
-
-func spawn_cell(position):
-	var tile_position = position / 64
-	print(tile_position)
-	$TileMap.set_cellv(tile_position, 1)
-	
-	for i in direction.values():
-		print("yuh")
-		match direction.values()[i]:
-			direction.UP:
-				print("up")
-				var up_tile = get_tile_in_dir(tile_position, direction.UP)
-				if up_tile != 1:
-					$TileMap.set_cellv(Vector2(tile_position.x, tile_position.y - 1), 4)
-			direction.DOWN:
-				print("down")
-				var down_tile = get_tile_in_dir(tile_position, direction.DOWN)
-				if down_tile != 1:
-					if down_tile != 10:
-						if down_tile != 7:
-							$TileMap.set_cellv(Vector2(tile_position.x, tile_position.y + 1), 8)
-						else:
-							$TileMap.set_cellv(Vector2(tile_position.x, tile_position.y + 1), 6)
-					else:
-						$TileMap.set_cellv(Vector2(tile_position.x, tile_position.y + 1), 9)
-			direction.LEFT:
-				print("left")
-				var left_tile = get_tile_in_dir(tile_position, direction.LEFT)
-				if left_tile != 1:
-					if left_tile != 4:
-						if left_tile != 5:
-							$TileMap.set_cellv(Vector2(tile_position.x - 1, tile_position.y), 10)
-						else:
-							$TileMap.set_cellv(Vector2(tile_position.x - 1, tile_position.y), 2)
-					else:
-						$TileMap.set_cellv(Vector2(tile_position.x - 1, tile_position.y), 3)
-			direction.RIGHT:
-				print("right")
-				var right_tile = get_tile_in_dir(tile_position, direction.RIGHT)
-				
-				if right_tile != 1:
-					if right_tile != 4:
-						if right_tile != 8:
-							if right_tile != 7:
-								$TileMap.set_cellv(Vector2(tile_position.x + 1, tile_position.y), 7)
-							else:
-								$TileMap.set_cellv(Vector2(tile_position.x + 1, tile_position.y), 7)
-						else:
-							$TileMap.set_cellv(Vector2(tile_position.x + 1, tile_position.y), 6)
-					else:
-						$TileMap.set_cellv(Vector2(tile_position.x + 1, tile_position.y), 5)
-
 func place_cell(position):
 	var tile_position = position / 64
 	$TileMap.set_cellv(tile_position, 1)
@@ -91,35 +50,42 @@ func place_cell(position):
 	var down_tile = get_tile_in_dir(tile_position, direction.DOWN)
 	var up_tile = get_tile_in_dir(tile_position, direction.UP)
 	
-	
+	var up_index = 0
+	var down_index = 0
+	var left_index = 0
+	var right_index = 0
 	
 	for i in direction.values():
 		match direction.values()[i]:
 			direction.UP:
-				var broken = false
-				for x in up_rules:
-					print(x)
-					if up_tile == x[0] and !broken:
-						$TileMap.set_cellv(Vector2(tile_position.x, tile_position.y - 1), x[1])
+				for rule in up_rules:
+					if rule[0] == up_tile:
+						up_index = rule[1]
+						print(up_index)
+				if up_index != 0:
+					$TileMap.set_cellv(Vector2(tile_position.x, tile_position.y - 1), up_index)
 			direction.DOWN:
-				for x in down_rules:
-					if down_tile == x[0]:
-						tile_index = x[1]
-						$TileMap.set_cellv(Vector2(tile_position.x, tile_position.y + 1), x[1])
+				for rule in down_rules:
+					if rule[0] == down_tile:
+						down_index = rule[1]
+				if down_index != 0:
+					$TileMap.set_cellv(Vector2(tile_position.x, tile_position.y + 1), down_index)
+				
 			direction.LEFT:
-				var tile_index = 10
-				for x in left_rules:
-					if left_tile == x[0]:
-						tile_index = x[1]
-				$TileMap.set_cellv(Vector2(tile_position.x - 1, tile_position.y), tile_index)
-				print(tile_index)
+				for rule in left_rules:
+						if rule[0] == left_tile:
+							left_index = rule[1]
+				if left_index != 0:
+					$TileMap.set_cellv(Vector2(tile_position.x - 1, tile_position.y), left_index)
 			direction.RIGHT:
-				var tile_index = 7
-				for x in right_rules:
-					if right_tile == x[0]:
-						tile_index = x[1]
-				print(tile_index)
-				$TileMap.set_cellv(Vector2(tile_position.x + 1, tile_position.y), tile_index)
+				for rule in right_rules:
+						if rule[0] == right_tile:
+							right_index = rule[1]
+				if right_index != 0:
+					$TileMap.set_cellv(Vector2(tile_position.x + 1, tile_position.y), right_index)
+	
+	cells.append(position)
+
 
 func _draw():
 	for x in range(0, grid_size.x):
@@ -131,6 +97,7 @@ func _process(_delta):
 	var relative_mouse_postition = get_global_mouse_position() - position
 	
 	$Sprite.position = Vector2(stepify(relative_mouse_postition.x, 64), stepify(relative_mouse_postition.y, 64))
+	
 
 
 func _input(event):

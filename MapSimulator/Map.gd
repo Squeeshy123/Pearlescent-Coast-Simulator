@@ -7,11 +7,11 @@ func _ready():
 
 func _input(event):
 	if Input.is_action_just_pressed("add_point"):
-		path.append(get_global_mouse_position())
+		path.append(get_global_mouse_position() - position)
 		print(path)
-	
+		update()
 
 func _draw():
-	for i in range(0, path.size()-1):
-		draw_circle(path[i], 5, Color.black)
-		print(path[i])
+	for i in path:
+		draw_circle(i, 10, Color(1,1,0,1))
+	print(path)

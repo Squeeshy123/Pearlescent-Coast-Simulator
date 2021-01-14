@@ -3,11 +3,17 @@ extends Camera2D
 var velocity : Vector2 = Vector2.ZERO
 var speed : float =  5
 
+var image : Image = load("res://MapSimulator/map3.png").get_data()
+
 var Zoom_amount : float = 0.2
 
 onready var map_ref : Sprite = get_tree().get_nodes_in_group("map")[0]
 
 export var Zoom_curve : Curve
+
+
+func _ready():
+	get_viewport().get_texture().get_data().lock()
 
 func _input(event):
 	if Input.is_action_pressed("Zoom_in"):
@@ -19,8 +25,6 @@ func _input(event):
 		for i in get_tree().get_nodes_in_group("turn"):
 			i.change_turn()
 		
-	
-
 
 func get_input():
 	velocity = Vector2.ZERO
@@ -39,6 +43,8 @@ func get_input():
 	
 	Zoom_amount = clamp(Zoom_amount, Zoom_curve.min_value, Zoom_curve.max_value)
 	
+
+
 func _process(delta):
 	get_input()
 	

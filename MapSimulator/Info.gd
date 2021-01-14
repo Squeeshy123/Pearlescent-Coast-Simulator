@@ -10,8 +10,8 @@ extends Control
 func _ready():
 	pass # Replace with function body.
 
-func update_data(data : Array):
+func update_data(data : Dictionary):
 	var final : String
-	for i in data:
+	for i in data.values():
 		final += str(i) + "\n"
 	$ColorRect/Label.text = final

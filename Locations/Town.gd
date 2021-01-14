@@ -25,6 +25,9 @@ var resource_diff = 15
 
 var stats = [data.food, data.wood, data.stone, data.steel, data.fuel, data.people, data.efficiency]
 
+var def_convoy_cooldown = 5
+var convoy_cooldown = def_convoy_cooldown
+
 # Called when the node enters the scene tree for the first time.
 func _ready():
 	data.efficiency = data.people * 0.01
@@ -52,13 +55,17 @@ func send_convoy(target_town : Node2D, resource : PoolStringArray, amount : int)
 	get_parent().add_child(convoi)
 	convoi.position = position
 	convoi.target = target_town
+	convoi.resources = resource
+	convoi.resource_amount = amount
 
 func give_resources(res : PoolStringArray, res_amount : float):
 	for i in res:
-		data[i] += res_amount
+		data[str(i)] += res_amount
+		print(i)
+		update_info()
 
 func update_info():
-	$Info.update_data(stats)
+	$Info.update_data(data)
 
 func _input(event):
 	if Input.is_action_just_pressed("Click"):

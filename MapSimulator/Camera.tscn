@@ -3,24 +3,33 @@
 [ext_resource path="res://MapSimulator/ViewCamera.gd" type="Script" id=1]
 [ext_resource path="res://Map/UI.tscn" type="PackedScene" id=2]
 
-[sub_resource type="Curve" id=4]
+[sub_resource type="Curve" id=1]
 min_value = 0.05
 max_value = 3.0
 _data = [ Vector2( 0, 3 ), 0.0, 7.61266e-07, 0, 0, Vector2( 0.994506, 0.0768182 ), -4.41606, 0.0, 0, 0 ]
 
-[sub_resource type="CircleShape2D" id=3]
+[sub_resource type="CircleShape2D" id=2]
 
 [node name="Camera2D" type="Camera2D"]
 current = true
 script = ExtResource( 1 )
-Zoom_curve = SubResource( 4 )
+Zoom_curve = SubResource( 1 )
 
 [node name="KinematicBody2D" type="KinematicBody2D" parent="."]
 
 [node name="CollisionShape2D" type="CollisionShape2D" parent="KinematicBody2D"]
-shape = SubResource( 3 )
+shape = SubResource( 2 )
 disabled = true
 
 [node name="CanvasLayer" type="CanvasLayer" parent="KinematicBody2D"]
 
 [node name="Control" parent="KinematicBody2D/CanvasLayer" instance=ExtResource( 2 )]
+
+[node name="ColorRect" type="ColorRect" parent="KinematicBody2D/CanvasLayer"]
+margin_left = 446.0
+margin_top = 3.0
+margin_right = 486.0
+margin_bottom = 43.0
+__meta__ = {
+"_edit_use_anchors_": false
+}

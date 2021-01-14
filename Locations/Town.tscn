@@ -4,7 +4,6 @@
 [ext_resource path="res://Locations/Town.gd" type="Script" id=2]
 [ext_resource path="res://MapSimulator/Info.tscn" type="PackedScene" id=3]
 
-
 [sub_resource type="CircleShape2D" id=1]
 radius = 39.6844
 

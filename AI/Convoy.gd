@@ -3,7 +3,7 @@ extends Node2D
 
 var target : Node2D
 var speed : float = 20
-var resources : PoolStringArray
+var resources : PoolIntArray
 var resource_amount : float = 10
 
 

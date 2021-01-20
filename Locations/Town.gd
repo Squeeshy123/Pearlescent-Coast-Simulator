@@ -9,6 +9,11 @@ const convo = preload("res://AI/Convoy.tscn")
 
 var spawned_convoy = false
 
+var current_convoys : Array
+var max_convoys = 4
+
+var mutex = Mutex.new()
+
 export var data = {
 	"name" : "hello",
 	"food" : 100,
@@ -23,15 +28,17 @@ export var data = {
 
 var resource_diff = 15
 
-var stats = [data.food, data.wood, data.stone, data.steel, data.fuel, data.people, data.efficiency]
+enum stat_res {NAME=0, FOOD=1, WOOD=2, STONE=3, STEEL=4, FUEL=5, PEOPLE=6, EFFICIENCEY=7, USAGE=8}
+var stats = [data.name, data.food, data.wood, data.stone, data.steel, data.fuel, data.people, data.efficiency, data.usage]
 
 var def_convoy_cooldown = 5
 var convoy_cooldown = def_convoy_cooldown
 
 # Called when the node enters the scene tree for the first time.
 func _ready():
-	data.efficiency = data.people * 0.01
-	data.usage = data.people * data.efficiency / 1000
+	stats = [data.name, data.food, data.wood, data.stone, data.steel, data.fuel, data.people, data.efficiency, data.usage]
+	stats[stat_res.EFFICIENCEY] = data.people * 0.01
+	stats[stat_res.USAGE] = stats[stat_res.PEOPLE] * data.efficiency / 1000
 
 func _process(delta):
 	$Sprite.scale = Vector2(1.1 - camera.Zoom_amount, 1.1 - camera.Zoom_amount) * 5
@@ -41,36 +48,79 @@ func _process(delta):
 		pass
 
 func change_turn():
-	for i in range(0, stats.size()-1):
-		stats[i] -= data.usage
-	for i in other_towns:
-		if i.data.steel > data.steel - resource_diff and !spawned_convoy:
-			send_convoy(i, ["steel"], resource_diff)
-			spawned_convoy = true
+	for i in range(1, stats.size()-1):
+		stats[i] -= stats[stat_res.USAGE]
+	
+	if spawned_convoy:
+		convoy_cooldown -= 1
+		if convoy_cooldown <= 0:
+			spawned_convoy = false
+			convoy_cooldown = def_convoy_cooldown
+	
+	for i in range(1, stat_res.size()-1):
+		var checker_thread = Thread.new()
+		checker_thread.start(self, "check_other_town_stat", stat_res.values()[i])
+		checker_thread.wait_to_finish()
+	
+	var convoy_check_thread = Thread.new()
+	
+	convoy_check_thread.start(self, "check_for_convoys", "hello")
+	
+	convoy_check_thread.wait_to_finish()
+	
 	update_info()
+	
 
+func check_other_town_stat():
+	var resources_to_send = []
+	for i in other_towns:
+		for j in range(1, stat_res.size()-1):
+			if i.stats[j] < stats[j] - resource_diff:
+				mutex.lock()
+				resources_to_send.append(stat_res.keys()[j])
+				mutex.unlock()
+		
+		send_convoy(i, resources_to_send, resource_diff)
+	
+	
+	
 
-func send_convoy(target_town : Node2D, resource : PoolStringArray, amount : int):
-	var convoi = convo.instance()
-	get_parent().add_child(convoi)
-	convoi.position = position
-	convoi.target = target_town
-	convoi.resources = resource
-	convoi.resource_amount = amount
+func check_for_convoys(_arg):
+	for i in range(0, current_convoys.size()-1):
+		if max_convoys:
+			if current_convoys[min(i, max_convoys)] == null:
+				mutex.lock()
+				current_convoys.remove(i)
+				mutex.unlock()
+			
 
-func give_resources(res : PoolStringArray, res_amount : float):
+func send_convoy(target_town : Node2D, resource : PoolIntArray, amount : int):
+	if !(current_convoys.size() >= max_convoys) and !spawned_convoy:
+		var convoi = convo.instance()
+		get_parent().add_child(convoi)
+		convoi.position = position
+		convoi.target = target_town
+		convoi.resources = resource
+		convoi.resource_amount = amount
+		
+		mutex.lock()
+		current_convoys.append(convoi)
+		mutex.unlock()
+		
+
+func give_resources(res : PoolIntArray, res_amount : float):
 	for i in res:
-		data[str(i)] += res_amount
-		print(i)
+		stats[i] += res_amount
 		update_info()
 
 func update_info():
-	$Info.update_data(data)
+	$Info.update_data(stats, stat_res)
 
 func _input(event):
 	if Input.is_action_just_pressed("Click"):
-			#Put Click Logic
-		pass
+			if mouse_in:
+				stats[stat_res.STEEL] -= 5
+		
 
 
 func _on_Area2D_mouse_entered():

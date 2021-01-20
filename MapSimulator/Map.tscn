@@ -46,6 +46,20 @@ position = Vector2( -207.21, 118.127 )
 "gland_t",
 ] instance=ExtResource( 3 )]
 position = Vector2( -83.1903, 64.3872 )
+data = {
+"efficiency": 10,
+"food": 100,
+"fuel": 100,
+"name": "hello",
+"people": 400,
+"steel": 50,
+"stone": 100,
+"usage": 10,
+"wood": 100
+}
+
+[node name="Node2D" parent="Graemland/Node2D4" instance=ExtResource( 3 )]
+position = Vector2( -265.578, 4.22803 )
 
 [node name="Node2D11" parent="Graemland" groups=[
 "gland_t",

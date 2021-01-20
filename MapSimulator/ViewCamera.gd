@@ -21,7 +21,7 @@ func _input(event):
 	if Input.is_action_pressed("Zoom_out"):
 		Zoom_amount -= 0.0125
 	
-	if Input.is_action_just_pressed("Change_turn"):
+	if Input.is_action_pressed("Change_turn"):
 		for i in get_tree().get_nodes_in_group("turn"):
 			i.change_turn()
 		

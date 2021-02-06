@@ -1,11 +1,18 @@
-[gd_scene load_steps=6 format=2]
+[gd_scene load_steps=9 format=2]
 
 [ext_resource path="res://MapSimulator/Camera.tscn" type="PackedScene" id=1]
 [ext_resource path="res://MapSimulator/map3.png" type="Texture" id=2]
 [ext_resource path="res://Locations/Town.tscn" type="PackedScene" id=3]
+[ext_resource path="res://MapSimulator/Sprite.gd" type="Script" id=4]
 [ext_resource path="res://MapSimulator/Map.gd" type="Script" id=5]
+[ext_resource path="res://Sprites/Town.png" type="Texture" id=6]
 
 [sub_resource type="GDScript" id=1]
+
+[sub_resource type="Curve2D" id=2]
+_data = {
+"points": PoolVector2Array( 0, 0, 0, 0, 581.386, -86.977, -516.568, -10.0794, 516.568, 10.0794, 1015.4, -650.526, -219.226, -128.512, 219.226, 128.512, 1468.97, -358.224, -234.345, -98.2738, 234.345, 98.2738, 2043.5, -408.621, -128.512, -128.512, 128.512, 128.512, 2441.63, -383.422, -148.671, 0, 148.671, 0, 2744.01, -116.319, -118.433, -2.51984, 118.433, 2.51984, 2980.88, -121.359, -125.992, -191.508, 125.992, 191.508, 3293.34, 49.9905, 50.3968, -204.107, -50.3968, 204.107, 3389.09, 438.046, 125.992, -284.742, -125.992, 284.742, 3154.75, 868.939, 173.869, 17.6389, -173.869, -17.6389, 2975.84, 1375.43, 398.135, 32.7579, -398.135, -32.7579, 2350.92, 1279.67, 352.778, 15.1191, -352.778, -15.1191, 1781.43, 1425.82, 110.873, 244.425, -110.873, -244.425, 1509.29, 906.737, 0, 0, 0, 0, 1348.02, 644.673, 30.2381, 40.3175, -30.2381, -40.3175, 1252.27, 543.879, 68.0357, 55.4365, -68.0357, -55.4365, 1179.19, 390.169, 95.754, 57.9564, -95.754, -57.9564, 985.163, 312.054, 244.425, -62.9961, -244.425, 62.9961, 758.377, 110.467, 0, 0, 0, 0, 607.454, 26.544, -5.04538, -27.7496, 5.04538, 27.7496, 594.84, -48.2958, 0, 0, 0, 0, 581.386, -86.977 )
+}
 
 [node name="The Pearlescent Coast" type="Node2D"]
 script = ExtResource( 5 )
@@ -13,7 +20,6 @@ script = ExtResource( 5 )
 [node name="map_placeholder" type="Sprite" parent="." groups=[
 "map",
 ]]
-position = Vector2( -142.846, -34.0684 )
 texture = ExtResource( 2 )
 
 [node name="Camera2D" parent="." groups=[
@@ -24,7 +30,7 @@ position = Vector2( -363.678, -58.368 )
 [node name="Navigation2D" type="Navigation2D" parent="."]
 
 [node name="Graemland" type="Node2D" parent="."]
-position = Vector2( -2392.72, -1628.23 )
+position = Vector2( -3549.68, -1350.47 )
 scale = Vector2( 1.26196, 1.26196 )
 
 [node name="Node2D" parent="Graemland" groups=[
@@ -57,9 +63,6 @@ data = {
 "usage": 10,
 "wood": 100
 }
-
-[node name="Node2D" parent="Graemland/Node2D4" instance=ExtResource( 3 )]
-position = Vector2( -265.578, 4.22803 )
 
 [node name="Node2D11" parent="Graemland" groups=[
 "gland_t",
@@ -216,7 +219,22 @@ position = Vector2( 47.6097, 473.027 )
 ] instance=ExtResource( 3 )]
 position = Vector2( 6.07971, 543.181 )
 
-[node name="Spatial" type="Spatial" parent="."]
+[node name="Ray" parent="Graemland" instance=ExtResource( 3 )]
+position = Vector2( -173.586, 386.957 )
 
 [node name="Polygon2D" type="Polygon2D" parent="."]
 script = SubResource( 1 )
+
+[node name="Skullicht" type="Node2D" parent="."]
+position = Vector2( -1755.53, -1602.88 )
+
+[node name="Aerefarren_Path" type="Path2D" parent="." groups=[
+"aere_path",
+]]
+curve = SubResource( 2 )
+
+[node name="Sprite" type="Sprite" parent="Aerefarren_Path"]
+position = Vector2( 1568.01, 671.7 )
+scale = Vector2( 6.03245, 6.03245 )
+texture = ExtResource( 6 )
+script = ExtResource( 4 )

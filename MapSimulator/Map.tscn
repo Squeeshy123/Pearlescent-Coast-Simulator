@@ -234,7 +234,8 @@ position = Vector2( -1755.53, -1602.88 )
 curve = SubResource( 2 )
 
 [node name="Sprite" type="Sprite" parent="Aerefarren_Path"]
-position = Vector2( 1568.01, 671.7 )
+position = Vector2( 1398.15, 707.018 )
 scale = Vector2( 6.03245, 6.03245 )
 texture = ExtResource( 6 )
+region_rect = Rect2( 0, 0, 33.0015, 16.6149 )
 script = ExtResource( 4 )

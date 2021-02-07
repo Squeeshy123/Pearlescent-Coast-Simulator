@@ -1,0 +1,32 @@
+[gd_scene load_steps=2 format=2]
+
+[ext_resource path="res://City Generator/CityGen.gd" type="Script" id=1]
+
+[node name="Node2D" type="Node2D"]
+
+[node name="Drawer" type="Node2D" parent="."]
+script = ExtResource( 1 )
+
+[node name="Control" type="Control" parent="."]
+anchor_left = 1.0
+anchor_right = 1.0
+anchor_bottom = 1.0
+__meta__ = {
+"_edit_use_anchors_": false
+}
+
+[node name="Button" type="Button" parent="Control"]
+margin_left = 846.354
+margin_top = 83.7445
+margin_right = 952.354
+margin_bottom = 123.744
+text = "Generate"
+
+[node name="LineEdit" type="LineEdit" parent="Control"]
+margin_left = 846.0
+margin_top = 131.0
+margin_right = 952.0
+margin_bottom = 155.0
+placeholder_text = "Resolution"
+[connection signal="button_down" from="Control/Button" to="Drawer" method="_on_Button_button_down"]
+[connection signal="text_entered" from="Control/LineEdit" to="Drawer" method="_on_LineEdit_text_entered"]

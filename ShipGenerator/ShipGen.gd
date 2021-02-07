@@ -34,11 +34,12 @@ func generate_ship():
 			tilemap.set_cell(xmargin + x, ymargin + y,0)
 	for y in range(hull_height):
 		for x in range(xsize):
-			var hull_interp = hull_curve.interpolate(float(x-1)/float(xsize))
+			
+			var hull_interp = hull_curve.interpolate(float(x+1)/float(xsize+1))
 			var y_intercept = (float(y)/float(hull_height))
-			print(str(y_intercept) + " " + str(hull_interp))
+			
 			if y_intercept < hull_interp:
-				tilemap.set_cell((xmargin-1) + x, ymargin - y, 0)
+				tilemap.set_cell((xmargin) + x, ymargin - y, 0)
 
 
 func generate_walls():
@@ -78,7 +79,10 @@ func _on_Generate_button_down():
 
 func _on_RandomizeDimensions_button_down():
 	randomize()
-	$Control/XSize.text = str(int(rand_range(5,10)))
+	var randx = int(rand_range(5,10))
+	if randx % 2 != 0:
+		randx += 1
+	$Control/XSize.text = str(int(randx))
 	$Control/YSize.text = str(int(rand_range(5,20)))
 	$Control/Hull_Height.text = str(int(rand_range(2,6)))
 

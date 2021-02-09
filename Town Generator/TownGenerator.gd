@@ -17,3 +17,4 @@ func _ready():
 func _draw():
 	for i in vpoints:
 		draw_circle(i, 10, Color.black)
+

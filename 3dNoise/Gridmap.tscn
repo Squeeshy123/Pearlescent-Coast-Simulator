@@ -1,0 +1,16 @@
+[gd_scene load_steps=3 format=2]
+
+[ext_resource path="res://3dNoise/VisualCuller.gd" type="Script" id=1]
+
+[sub_resource type="CubeMesh" id=1]
+
+[node name="Spatial" type="Spatial"]
+
+[node name="MeshInstance" type="MeshInstance" parent="."]
+mesh = SubResource( 1 )
+material/0 = null
+script = ExtResource( 1 )
+
+[node name="VisibilityNotifier" type="VisibilityNotifier" parent="MeshInstance"]
+[connection signal="screen_entered" from="MeshInstance/VisibilityNotifier" to="MeshInstance" method="_on_VisibilityNotifier_screen_entered"]
+[connection signal="screen_exited" from="MeshInstance/VisibilityNotifier" to="MeshInstance" method="_on_VisibilityNotifier_screen_exited"]

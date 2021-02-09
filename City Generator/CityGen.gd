@@ -20,16 +20,18 @@ func generate():
 	points_color.clear()
 	randomize()
 	point_thread = Thread.new()
-	point_thread.start(self, "generate_points", "a")
+	generate_points("a")
 	update()
 
 func generate_points(a):
 	point_mutex = Mutex.new()
-	for i in range(point_amount):
-		point_mutex.lock()
-		points.append(Vector2(rand_range(0,point_range.x),rand_range(0,point_range.y)))
-		points_color.append(Color(rand_range(0,1),rand_range(0,1),rand_range(0,1)))
-		point_mutex.unlock()
+	var size = 10
+	for x in range(point_amount/2):
+		for y in range(point_amount/2):
+			point_mutex.lock()
+			points.append(Vector2(x*size,y*size))
+			points_color.append(Color(rand_range(0,1),rand_range(0,1),rand_range(0,1)))
+			point_mutex.unlock()
 
 var n = 0
 
@@ -38,7 +40,7 @@ func generate_cells(a):
 	for x in range((point_range.x)/point_res):
 		for y in range((point_range.y)/point_res):
 			n = 0
-			for i in range(point_amount):
+			for i in range(points.size()-1):
 				cell_mutex.lock()
 				if distance(points[i].x, x * point_res, points[i].y, y * point_res) < distance(points[n].x, x * point_res, points[n].y, y * point_res):
 					n = i
@@ -55,8 +57,8 @@ func _draw():
 
 func distance(x1, x2, y1, y2): 
 	var d 
-	d = sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)); # Euclidian
-#	d = abs(x1 - x2) + abs(y1 - y2) # Manhattan
+#	d = sqrt((x1 - x2) * (x1 - x2) + (y1 - y2) * (y1 - y2)); # Euclidian
+	d = abs(x1 - x2) + abs(y1 - y2) # Manhattan
 #	d = pow(pow(abs(x1 - x2), p) + pow(abs(y1 - y2), p), (1 / p)) # Minkovski
 	return d
 
